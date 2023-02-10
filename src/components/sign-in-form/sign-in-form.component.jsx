@@ -1,25 +1,37 @@
 import { useState } from "react";
+
 import {
-  createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
+  signInWithGooglePopup,
+  signInAuthUserWithEmailAndPassword,
 } from "../../utils/firebase/firebase.utils.js";
 
 import FormInput from "../form-input/form-input.component.jsx";
-import "./sign-up-form.styles.scss";
+import "./sign-in-form.styles.scss";
 import Button from "../button/button.component.jsx";
-import { UserContext } from "../../contexts/user.context.jsx";
+
+const GoogleLogo = () => {
+  return(
+    <img src="https://i.ibb.co/HFqJx8Z/google-318-278809.png" alt = "Google logo" style={{
+      width: '25px',
+      marginRight: '10px'
+    }}/>
+  )
+}
 
 const defaultFormFields = {
-  profileName: "",
   email: "",
   password: "",
-  confirmPassword: "",
 };
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
-  const { email, profileName, password, confirmPassword } = formFields;
+  const { email, password } = formFields;
 
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+    
+  };
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
@@ -32,39 +44,33 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match, try again.");
-      return;
-    }
-
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
+      const {user} = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-      await createUserDocumentFromAuth(user, { profileName });
+      console.log(user, "sign-in response");
+
       resetFormFields();
     } catch (err) {
-      if (err.code === "auth/email-already-in-use") {
-        alert("Account already exists.");
-      } else console.log(err);
+      switch (err.code) {
+        case "auth/wrong-password":
+          alert("The password entered is incorrect");
+          break;
+        case "auth/user-not-found":
+          alert("This account does not exist");
+          break;
+        default:
+          console.log(err);
+      }
     }
   };
 
   return (
     <div className="sign-up-container">
-      <h2>Don't have an account?</h2>
-      <span>Sign up with your email and passowrd</span>
+      <h2>Already have an account?</h2>
+      <span>Sign in with your email and passowrd</span>
       <form onSubmit={handleSubmit}>
-        <FormInput
-          label="Profile Name"
-          type="text"
-          required
-          onChange={handleChange}
-          name="profileName"
-          value={profileName}
-        />
-
         <FormInput
           label="Email"
           type="email"
@@ -83,19 +89,15 @@ const SignUpForm = () => {
           value={password}
         />
 
-        <FormInput
-          label="Confirm Password"
-          type="password"
-          required
-          onChange={handleChange}
-          name="confirmPassword"
-          value={confirmPassword}
-        />
-
-        <Button type="submit">Sign Up</Button>
+        <div className="buttons-container">
+          <Button type="submit">Sign In</Button>
+          <Button type="button" buttonType="google" onClick={signInWithGoogle}>
+            <GoogleLogo/> Google sign in
+          </Button>
+        </div>
       </form>
     </div>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

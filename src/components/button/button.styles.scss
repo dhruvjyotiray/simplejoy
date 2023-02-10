@@ -6,15 +6,16 @@
   line-height: 50px;
   padding: 0 35px 0 35px;
   font-size: 15px;
-  background-color: black;
+  background-color: #871b77;
   color: white;
   text-transform: uppercase;
-  font-family: 'Open Sans Condensed';
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: bolder;
   border: none;
   cursor: pointer;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
 
   &:hover {
     background-color: white;
@@ -23,12 +24,13 @@
   }
 
   &.google-sign-in {
-    background-color: #4285f4;
+    background-color: #02060b;
     color: white;
 
     &:hover {
-      background-color: #357ae8;
-      border: none;
+      background-color: white;
+      color: black;
+      border: 1px solid black;
     }
   }
 
