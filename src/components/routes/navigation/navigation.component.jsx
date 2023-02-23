@@ -1,6 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
 import { Fragment, useContext } from "react";
-import "./navigation.styles.scss";
+import {
+  NavBarContainer,
+  LogoContainer,
+  NavLink,
+  NavLinks,
+} from "./navigation.styles";
 import { UserContext } from "../../../contexts/user.context";
 import { CartContext } from "../../../contexts/cart.context";
 import { signOutUser } from "../../../utils/firebase/firebase.utils";
@@ -23,29 +28,25 @@ const NavBar = () => {
   // console.log(currentUser, 'usercurrent')
   return (
     <Fragment>
-      <div className="navbar">
-        <Link className="logo-container" to="/">
+      <NavBarContainer>
+        <LogoContainer to="/">
           <SimpleJoy />
-        </Link>
+        </LogoContainer>
 
-        <div className="nav-links-container">
-          <Link className="nav-link" to="/shop">
-            SHOP
-          </Link>
+        <NavLinks>
+          <NavLink to="/shop">SHOP</NavLink>
           {currentUser ? (
-            <span className="nav-link" onClick={signOutUser}>
+            <NavLink as="span" onClick={signOutUser}>
               SIGN OUT
-            </span>
+            </NavLink>
           ) : (
-            <Link className="nav-link" to="/auth">
-              SIGN IN
-            </Link>
+            <NavLink to="/auth">SIGN IN</NavLink>
           )}
 
           <CartIcon />
-        </div>
+        </NavLinks>
         {isCartOpen && <CartDropdown />}
-      </div>
+      </NavBarContainer>
       <Outlet />
     </Fragment>
   );

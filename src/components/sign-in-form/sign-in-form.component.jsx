@@ -8,16 +8,20 @@ import {
 
 import FormInput from "../form-input/form-input.component.jsx";
 import "./sign-in-form.styles.scss";
-import Button from "../button/button.component.jsx";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component.jsx";
 
 const GoogleLogo = () => {
-  return(
-    <img src="https://i.ibb.co/HFqJx8Z/google-318-278809.png" alt = "Google logo" style={{
-      width: '25px',
-      marginRight: '10px'
-    }}/>
-  )
-}
+  return (
+    <img
+      src="https://i.ibb.co/HFqJx8Z/google-318-278809.png"
+      alt="Google logo"
+      style={{
+        width: "25px",
+        marginRight: "10px",
+      }}
+    />
+  );
+};
 
 const defaultFormFields = {
   email: "",
@@ -30,7 +34,6 @@ const SignInForm = () => {
 
   const signInWithGoogle = async () => {
     await signInWithGooglePopup();
-    
   };
 
   const resetFormFields = () => {
@@ -45,7 +48,7 @@ const SignInForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const {user} = await signInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
@@ -91,8 +94,8 @@ const SignInForm = () => {
 
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" buttonType="google" onClick={signInWithGoogle}>
-            <GoogleLogo/> Google sign in
+          <Button type="button" buttonType={BUTTON_TYPE_CLASSES.google} onClick={signInWithGoogle}>
+            <GoogleLogo /> Google sign in
           </Button>
         </div>
       </form>
